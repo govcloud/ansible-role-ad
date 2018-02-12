@@ -18,3 +18,6 @@ authconfig_access_users: []
 
 # This variable sometimes does not get set and shouldn't be relied on.
 ansible_distribution_major_version: ""
+
+#ad_info_ad_server: dc1.example.local
+#ad_info_ad_backup_server: dc2.example.local

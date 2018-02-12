@@ -40,15 +40,15 @@ debug_level = {{ authconfig_debug_level }}
 debug_level = {{ authconfig_debug_level }}
 {% endif %}
 ad_domain = {{ authconfig_domain }}
-{% if ad_info is defined %}
-ad_server = {{ ad_info.ad_server }}
+{% if ad_info_ad_server is defined %}
+ad_server = {{ ad_info_ad_server }}
 {% endif %}
-{% if ad_info is defined %}
-ad_backup_server = {{ ad_info.ad_backup_server }}
+{% if ad_info_ad_backup_server is defined %}
+ad_backup_server = {{ ad_info_ad_backup_server }}
 {% endif %}
 ad_hostname = {{ ansible_hostname }}.{{ authconfig_domain }}
 krb5_realm = {{ authconfig_realm }}
-realmd_tags = manages-system joined-with-samba 
+realmd_tags = manages-system joined-with-samba
 cache_credentials = True
 id_provider = ad
 krb5_store_password_if_offline = True
