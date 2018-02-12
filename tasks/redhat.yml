@@ -1,0 +1,77 @@
+---
+- name: authconfig packages
+  yum: name={{ item }}
+  with_items: "{{ authconfig_packages }}"
+  tags:
+    - aad_agent
+    - aad_packages
+    - aad_sssd
+
+- name: Join Domain
+  shell: "echo -n '{{ authconfig_sssd_pass }}' | adcli join --stdin-password --domain-ou={{ authconfig_computer_ou }} --login-user={{ authconfig_sssd_name }} -S  {{ad_info.ad_server}} {{ authconfig_domain }}"
+  args:
+    creates: /etc/krb5.keytab
+  tags:
+    - aad_adjoin
+    - aad_agent
+    - aad_sssd
+
+# Save backup here since --savebackup is naughty.
+- name: authconfig
+  shell: "/usr/sbin/authconfig --savebackup=pre-authconfig-adcli"
+  args:
+    creates: /var/lib/authconfig/backup-pre-authconfig-adcli
+  tags:
+    - aad_authconfig
+    - aad_sssd
+
+# Note that we are not using --savebackup here. For some reason it causes several other options to stop working.
+# --nostart is used because we don't have the template files created for krb5.conf and sssd.conf yet.
+- name: authconfig
+  shell: "/usr/sbin/authconfig --enablesssd --enablesssdauth --disableldap --disableldapauth --enablemkhomedir --update --nostart && touch /var/lib/authconfig/ansible_configured"
+  args:
+    creates: /var/lib/authconfig/ansible_configured
+  notify:
+    - "clear nscd"
+    - "clear ssh AllowGroups"
+    - "disable nslcd"  # Previous ldap systems have this running and it seems to do "odd"
+    - "restart sssd"
+    - "restart dbus"
+    - "restart oddjob"
+    - "restart logind"
+  tags:
+    - aad_authconfig
+    - aad_sssd
+
+# On RHEL nsswitch.conf is not updated.
+- name: nsswitch passwd
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'passwd:     files sss'
+    regexp: '^passwd: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: nsswitch shadow
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'shadow:     files sss'
+    regexp: '^shadow: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: nsswitch group
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'group:      files sss'
+    regexp: '^group: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: /etc/hosts entry
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }}  {{ ansible_hostname }}.{{ authconfig_domain }} {{ ansible_hostname }}"

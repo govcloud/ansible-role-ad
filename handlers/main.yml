@@ -1,0 +1,63 @@
+---
+- name: authconfig mkhomedir
+  command: "/usr/sbin/authconfig --enablemkhomedir --update"
+  notify: restart sssd
+
+- name: disable nslcd
+  service:
+    name: nslcd
+    enabled: false
+    state: stopped
+  ignore_errors: false
+  failed_when: false
+
+- name: clear nscd
+  shell: "/usr/sbin/nscd -i passwd; /usr/sbin/nscd -i group"
+  ignore_errors: yes
+
+- name: clear ssh AllowGroups
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^(AllowGroups .*)'
+    line:   '# \1'
+    backrefs: yes
+    state: present
+  notify: restart ssh
+  notify: restart sshd
+
+- name: restart sssd
+  service:
+    name: sssd
+    enabled: yes
+    state: restarted
+
+# Service is dbus
+- name: restart dbus
+  service:
+    name: dbus
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'RedHat'
+
+- name: restart oddjob
+  service:
+    name: oddjobd
+    enabled: yes
+    state: restarted
+
+- name: restart sshd
+  service:
+    name: sshd
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'RedHat'
+
+- name: restart logind
+  service:
+    name: systemd-logind
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'RedHat'
+
+- name: pam-auth-update
+  command: /usr/sbin/pam-auth-update --package

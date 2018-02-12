@@ -1,0 +1,91 @@
+---
+- set_fact:
+    distro: "{{ansible_os_family}}-{{ansible_distribution_major_version}}"
+  tags:
+    - aad_adjoin
+    - aad_sssd
+    - always
+
+# load version-specific variables
+- block:
+    - include_vars: "{{ item }}"
+      with_first_found:
+        - "../vars/{{distro}}.yml"
+  rescue:
+    - fail: msg="Variables file for distro {{ distro }} were not found."
+  tags:
+    - aad_adjoin
+    - aad_sssd
+
+- import_tasks: redhat.yml
+  when: ansible_os_family == 'RedHat'
+
+# Common files between the dists
+- name: krb5.conf
+  template:
+    src: krb5.conf.j2
+    dest: /etc/krb5.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  tags:
+    - aad_krb5_conf
+    - aad_sssd
+
+- name: sssd.conf
+  template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    owner: root
+    group: root
+    mode: 0600
+    backup: yes
+  notify: restart sssd
+  tags:
+    - aad_sssd_conf
+    - aad_sssd
+
+- name: Install ssh legal thing
+  copy:
+    src: ssh_issue
+    dest: /etc/ssh/issue
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart ssh
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- name: Update sshd_config for legal thing
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'Banner /etc/ssh/issue'
+    regexp: '^(#|)Banner\ .*'
+  notify: restart ssh
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- name: Update sshd_config to allow PasswordAuthentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'PasswordAuthentication yes'
+    regexp: '^(#|)PasswordAuthentication\ .*'
+  notify: restart ssh
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- name: Update sshd_config to remove old PasswordAuthentication no if exists
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'PasswordAuthentication no'
+    state: absent
+  notify: restart ssh
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- meta: flush_handlers
