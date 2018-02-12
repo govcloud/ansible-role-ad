@@ -2,13 +2,14 @@
 authconfig_debug_mode: false
 authconfig_debug_level: 3
 
-#authconfig_domain: 'example.com'
-#authconfig_realm:  'EXAMPLE.COM'
-#authconfig_windomain: "EXAMPLECOM"
-authconfig_computer_ou: 'ou=computers,dc=example,dc=com'
+authconfig_domain: 'cloud.department.ca'
+authconfig_realm:  'CLOUD.DEPARTMENT.CA'
+authconfig_computer_ou: 'ou=computers,dc=cloud,dc=department,dc=ca'
 
-#authconfig_sssd_user: 'prod.example_sssdjoin.username'
-#authconfig_sssd_pass: 'prod.example_sssdjoin.password'
+#authconfig_windomain: "EXAMPLECOM"
+
+authconfig_sssd_user: 'admin'
+authconfig_sssd_pass: 'pass'
 
 # An array/list of groups that have access to the host
 authconfig_access_groups: []
@@ -19,5 +20,5 @@ authconfig_access_users: []
 # This variable sometimes does not get set and shouldn't be relied on.
 ansible_distribution_major_version: ""
 
-#ad_info_ad_server: dc1.example.local
-#ad_info_ad_backup_server: dc2.example.local
+ad_info_ad_server: dc1.department.ca
+ad_info_ad_backup_server: dc2.department.ca

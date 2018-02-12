@@ -8,7 +8,7 @@
     - aad_sssd
 
 - name: Join Domain
-  shell: "echo -n '{{ authconfig_sssd_pass }}' | adcli join --stdin-password --domain-ou={{ authconfig_computer_ou }} --login-user={{ authconfig_sssd_name }} -S  {{ad_info_ad_server}} {{ authconfig_domain }}"
+  shell: "echo -n '{{ authconfig_sssd_pass }}' | adcli join --stdin-password --domain-ou={{ authconfig_computer_ou }} --login-user={{ authconfig_sssd_user }} -S  {{ad_info_ad_server}} {{ authconfig_domain }}"
   args:
     creates: /etc/krb5.keytab
   tags:
@@ -16,7 +16,7 @@
     - aad_agent
     - aad_sssd
 
-# Save backup here since --savebackup is naughty.
+# Save backup.
 - name: authconfig
   shell: "/usr/sbin/authconfig --savebackup=pre-authconfig-adcli"
   args:
@@ -25,8 +25,7 @@
     - aad_authconfig
     - aad_sssd
 
-# Note that we are not using --savebackup here. For some reason it causes several other options to stop working.
-# --nostart is used because we don't have the template files created for krb5.conf and sssd.conf yet.
+# Parameter --nostart used since krb5.conf and sssd.conf don't exist yet.
 - name: authconfig
   shell: "/usr/sbin/authconfig --enablesssd --enablesssdauth --disableldap --disableldapauth --enablemkhomedir --update --nostart && touch /var/lib/authconfig/ansible_configured"
   args:
@@ -34,7 +33,7 @@
   notify:
     - "clear nscd"
     - "clear ssh AllowGroups"
-    - "disable nslcd"  # Previous ldap systems have this running and it seems to do "odd"
+    - "disable nslcd"  # Odd behavior if is running
     - "restart sssd"
     - "restart dbus"
     - "restart oddjob"
