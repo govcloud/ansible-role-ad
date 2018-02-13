@@ -1,5 +1,8 @@
 ## {{ ansible_managed }}
 
+includedir /etc/krb5.conf.d/
+includedir /var/lib/sss/pubconf/krb5.include.d/
+
 [logging]
  default = FILE:/var/log/krb5libs.log
  kdc = FILE:/var/log/krb5kdc.log
@@ -8,14 +11,16 @@
 [libdefaults]
  default_realm = {{ authconfig_realm.upper() }}
  dns_lookup_realm = false
- dns_lookup_kdc = false
  ticket_lifetime = 24h
  renew_lifetime = 7d
  forwardable = true
+ rdns = false
+ default_ccache_name = KEYRING:persistent:%{uid}
 
 [realms]
+ {{ authconfig_realm.upper() }} = {
+ }
 
 [domain_realm]
-# {{ authconfig_realm.lower() }} = {{ authconfig_realm.upper() }}
-# .{{ authconfig_realm.lower() }} = {{ authconfig_realm.upper() }}
-# .{{ authconfig_windomain }} = {{ authconfig_realm.upper() }}
+ {{ authconfig_realm.lower() }} = {{ authconfig_realm.upper() }}
+ .{{ authconfig_realm.lower() }} = {{ authconfig_realm.upper() }}
