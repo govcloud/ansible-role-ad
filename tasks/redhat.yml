@@ -25,9 +25,6 @@
     - aad_authconfig
     - aad_sssd
 
-- name: Add AD user to sudoers
-  shell: "usermod -aG wheel {{ authconfig_sssd_user }}@{{ authconfig_domain }}"
-
 # Parameter --nostart used since krb5.conf and sssd.conf don't exist yet.
 - name: authconfig
   shell: "/usr/sbin/authconfig --enablesssd --enablesssdauth --disableldap --disableldapauth --enablemkhomedir --update --nostart && touch /var/lib/authconfig/ansible_configured"
