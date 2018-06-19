@@ -1,0 +1,31 @@
+---
+- name: auth packages
+  apt:
+    name: "{{ item }}"
+    update_cache: true
+  with_items: "{{ authconfig_packages }}"
+
+#- name: nsswitch conf
+#  template:
+#    src: nsswitch.conf.j2
+#    dest: /etc/nsswitch.conf
+
+# PAM module to auto-create home directories
+- name: mkhomedir
+  template:
+    dest: '/usr/share/pam-configs/mkhomedir'
+    src: 'mkhomedir.j2'
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+  notify: pam-auth-update
+
+# PAM module to restrict access to specific users/groups
+#- name: enable access restrictions
+#  template:
+#    dest: /usr/share/pam-configs/access
+#    src: pam_config_access.j2
+#    owner: 'root'
+#    group: 'root'
+#    mode: 0644
+#  notify: pam-auth-update
