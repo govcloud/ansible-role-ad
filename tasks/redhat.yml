@@ -8,7 +8,7 @@
     - aad_sssd
 
 - name: Join Domain
-  shell: "echo -n '{{ authconfig_sssd_pass }}' | adcli join --stdin-password --domain-ou='{{ authconfig_computer_ou }}' --login-user={{ authconfig_sssd_user }} -S  {{ad_info_ad_server}} {{ authconfig_domain }}"
+  shell: "echo -n '{{ authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ authconfig_domain }}' --domain-ou='{{ authconfig_computer_ou }}' --login-user={{ authconfig_sssd_user }} -S  {{ad_info_ad_server}} {{ authconfig_domain }}"
   args:
     creates: /etc/krb5.keytab
   tags:
