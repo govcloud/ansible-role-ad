@@ -1,24 +1,24 @@
 ---
-authconfig_debug_mode: false
-authconfig_debug_level: 3
+linux_ad_authconfig_debug_mode: false
+linux_ad_authconfig_debug_level: 3
 
-authconfig_domain: 'cloud.department.ca'
-authconfig_realm:  'CLOUD.DEPARTMENT.CA'
-authconfig_computer_ou: 'ou=computers,dc=cloud,dc=department,dc=ca'
+linux_ad_authconfig_domain: 'cloud.department.ca'
+linux_ad_authconfig_realm:  'CLOUD.DEPARTMENT.CA'
+linux_ad_authconfig_computer_ou: 'ou=computers,dc=cloud,dc=department,dc=ca'
 
-#authconfig_windomain: "EXAMPLECOM"
+#linux_ad_authconfig_windomain: 'EXAMPLECOM'
 
-authconfig_sssd_user: 'admin'
-authconfig_sssd_pass: 'pass'
+linux_ad_authconfig_sssd_user: 'admin'
+linux_ad_authconfig_sssd_pass: 'pass'
 
 # An array/list of groups that have access to the host
-authconfig_access_groups: []
+linux_ad_authconfig_access_groups: []
 
 # An array/list of users that have access to the host
-authconfig_access_users: []
+linux_ad_authconfig_access_users: []
 
 # This variable sometimes does not get set and shouldn't be relied on.
-ansible_distribution_major_version: ""
+linux_ad_ansible_distribution_major_version: ''
 
-ad_info_ad_server: dc1.department.ca
-ad_info_ad_backup_server: dc2.department.ca
+linux_ad_ad_info_ad_server: 'dc1.department.ca'
+linux_ad_ad_info_ad_backup_server: 'dc2.department.ca'

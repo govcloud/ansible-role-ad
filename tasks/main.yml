@@ -1,6 +1,6 @@
 ---
 - set_fact:
-    distro: "{{ansible_os_family}}-{{ansible_distribution_major_version}}"
+    distro: "{{ansible_os_family}}-{{linux_ad_ansible_distribution_major_version}}"
   tags:
     - aad_adjoin
     - aad_sssd

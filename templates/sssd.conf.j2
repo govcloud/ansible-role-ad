@@ -1,45 +1,45 @@
 ## {{ ansible_managed }}
 
 [ssh]
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
 [sudo]
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
 [nss]
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
 [pam]
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
 [ldap]
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
 filter_users = root,daemon,bin,sys,sync,games,man,lp,mail,news,uucp,proxy,www-data,backup,nobody,syslog,sshd,vagrant,ubuntu,ansible
 filter_groups = root,daemon,bin,sys,sync,games,man,lp,mail,news,uucp,proxy,www-data,backup,nobody,syslog,sshd,vagrant,ubuntu,ansible
 
 [sssd]
-domains = {{authconfig_domain}}
+domains = {{linux_ad_authconfig_domain}}
 config_file_version = 2
 services = nss, pam, ssh, sudo
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
-[domain/{{ authconfig_domain }}]
-ad_hostname = {{ ansible_hostname }}.{{ authconfig_domain }}
-ad_domain = {{ authconfig_domain }}
-krb5_realm = {{ authconfig_realm }}
+[domain/{{ linux_ad_authconfig_domain }}]
+ad_hostname = {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }}
+ad_domain = {{ linux_ad_authconfig_domain }}
+krb5_realm = {{ linux_ad_authconfig_realm }}
 realmd_tags = manages-system joined-with-samba
 cache_credentials = True
 id_provider = ad
@@ -50,17 +50,17 @@ use_fully_qualified_names = False
 fallback_homedir = /home/%u
 access_provider = ad
 
-{% if authconfig_debug_mode %}
-debug_level = {{ authconfig_debug_level }}
+{% if linux_ad_authconfig_debug_mode %}
+debug_level = {{ linux_ad_authconfig_debug_level }}
 {% endif %}
 
-{% if ad_info_ad_server is defined %}
-ad_server = {{ ad_info_ad_server }}
+{% if linux_ad_ad_info_ad_server is defined %}
+ad_server = {{ linux_ad_ad_info_ad_server }}
 {% endif %}
 
-{% if ad_info_ad_backup_server is defined %}
-ad_backup_server = {{ ad_info_ad_backup_server }}
+{% if linux_ad_ad_info_ad_backup_server is defined %}
+ad_backup_server = {{ linux_ad_ad_info_ad_backup_server }}
 {% endif %}
 
-simple_allow_groups = {{ authconfig_access_groups| join(', ') }}
-simple_allow_users  = {{ authconfig_access_users | join(', ') }}
+simple_allow_groups = {{ linux_ad_authconfig_access_groups| join(', ') }}
+simple_allow_users  = {{ linux_ad_authconfig_access_users | join(', ') }}
