@@ -22,3 +22,7 @@ linux_ad_ansible_distribution_major_version: ''
 
 linux_ad_ad_info_ad_server: 'dc1.department.ca'
 linux_ad_ad_info_ad_backup_server: 'dc2.department.ca'
+
+# Home directory of the user. (You can use these variables: %u -login name, %U - UID number, %d - domain name, %f - fully qualified user name (user@domain))
+linux_ad_home_dir: '/home/%d/%u'
+linux_ad_shell: '/bin/bash'
