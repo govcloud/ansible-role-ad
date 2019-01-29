@@ -8,6 +8,10 @@ galaxy_info:
   - name: EL
     versions:
       - 7
+  - name: Ubuntu
+    versions:
+    - trusty
+    - xenial
   galaxy_tags:
     - ad
     - activedirectory

@@ -36,7 +36,7 @@
     name: dbus
     enabled: yes
     state: restarted
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Ubuntu'
 
 - name: restart oddjob
   service:
@@ -57,6 +57,13 @@
     enabled: yes
     state: restarted
   when: ansible_os_family == 'RedHat'
+
+- name: restart ssh
+  service:
+    name: ssh
+    enabled: yes
+    state: restarted
+  when: ansible_distribution == 'Ubuntu'
 
 - name: pam-auth-update
   command: /usr/sbin/pam-auth-update --package

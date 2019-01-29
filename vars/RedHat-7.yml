@@ -1,5 +1,5 @@
 ---
-# Cent/EL 7
+# CentOS / RHEL
 authconfig_packages:
   - 'sssd'
   - 'adcli'

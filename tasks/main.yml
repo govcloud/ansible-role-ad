@@ -20,6 +20,9 @@
 - import_tasks: redhat.yml
   when: ansible_os_family == 'RedHat'
 
+- import_tasks: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
 # Common files between the dists
 - name: krb5.conf
   template:
@@ -89,3 +92,10 @@
     - aad_sssd
 
 - meta: flush_handlers
+
+- name: Update sudoers to give AD group access
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%domain\s'
+    line: '%domain\ admins@cloud.statcan.ca'
