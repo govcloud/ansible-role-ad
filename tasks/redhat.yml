@@ -7,8 +7,8 @@
     - aad_packages
     - aad_sssd
 
-- name: Join Domain
-  shell: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ linux_ad_authconfig_domain }}' --domain-ou='{{ linux_ad_authconfig_computer_ou }}' --login-user={{ linux_ad_authconfig_sssd_user }} -S  {{linux_ad_ad_info_ad_server}} {{ linux_ad_authconfig_domain }}"
+- name: join Domain
+  shell: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ linux_ad_authconfig_domain }}' --domain-ou='{{ linux_ad_authconfig_computer_ou }}' --login-user={{ linux_ad_authconfig_sssd_user }} -S  {{ linux_ad_ad_info_ad_server }} {{ linux_ad_authconfig_domain }}"
   args:
     creates: /etc/krb5.keytab
   tags:
@@ -16,7 +16,7 @@
     - aad_agent
     - aad_sssd
 
-# Save backup.
+# Save backup
 - name: authconfig
   shell: "/usr/sbin/authconfig --savebackup=pre-authconfig-adcli"
   args:
