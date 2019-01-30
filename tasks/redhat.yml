@@ -1,7 +1,6 @@
 ---
 - name: authconfig packages
-  yum: name={{ item }}
-  with_items: "{{ authconfig_packages }}"
+  yum: name='{{ authconfig_packages }}'
   tags:
     - aad_agent
     - aad_packages
