@@ -31,4 +31,4 @@ linux_ad_home_dir_base:
   - '/home/{{ linux_ad_authconfig_domain }}'
 linux_ad_home_dir_user: 'root'
 linux_ad_home_dir_group: 'root'
-linux_ad_home_dir_mode: '0755'
+linux_ad_home_dir_mode: 0755
