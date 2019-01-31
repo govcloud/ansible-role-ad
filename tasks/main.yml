@@ -91,3 +91,13 @@
     - aad_sssd
 
 - meta: flush_handlers
+
+- name: create Active Directory home directory
+  file:
+    path: '{{ item }}'
+    owner: '{{ linux_ad_home_dir_user }}'
+    group: '{{ linux_ad_home_dir_group }}'
+    mode: '{{ linux_ad_home_dir_mode }}'
+    recurse: yes
+    state: directory
+  with_items: '{{ linux_ad_home_dir_base | default([]) }}'

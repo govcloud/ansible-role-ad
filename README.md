@@ -93,6 +93,23 @@ Additionally you can use these variables:
 
 Shell to use for freshly created users.
 
+    linux_ad_home_dir_base:
+      - '/home/{{ linux_ad_authconfig_domain }}'
+
+If you not using /home/%s as home directory, the script have to create all of required domains subdirectory (in this example case /home/cloud.department.ca/). Please list all possible domains here.
+
+    linux_ad_home_dir_user: 'root'
+
+The user of the newly created subhome directory.
+
+    linux_ad_home_dir_group: 'root'
+
+The group of the newly created subhome directory.
+
+    linux_ad_home_dir_mode: 755
+
+The mode of the newly created subhome directory.
+
 ## Dependencies
 
 None.
