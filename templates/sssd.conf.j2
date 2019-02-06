@@ -47,10 +47,8 @@ krb5_store_password_if_offline = True
 default_shell = {{ linux_ad_shell }}
 ldap_id_mapping = True
 use_fully_qualified_names = False
-fallback_homedir = '{{ linux_ad_home_dir }}'
+fallback_homedir = {{ linux_ad_home_dir }}
 access_provider = ad
-ldap_id_mapping = True
-use_fully_qualified_names = False
 
 {% if linux_ad_authconfig_debug_mode %}
 debug_level = {{ linux_ad_authconfig_debug_level }}
