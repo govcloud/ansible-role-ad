@@ -1,9 +1,8 @@
 ---
 - name: auth packages
   apt:
-    name: "{{ item }}"
+    name: "{{ authconfig_packages }}"
     update_cache: true
-  with_items: "{{ authconfig_packages }}"
 
 #- name: nsswitch conf
 #  template:
