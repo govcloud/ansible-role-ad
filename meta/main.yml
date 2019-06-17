@@ -1,7 +1,8 @@
 ---
 galaxy_info:
-  author: William Hearn
-  description: Install and configures Active Directory.
+  role_name: linux-ad
+  author: Kálmán Szalai - KAMI
+  description: Installs and configures Active Directory on Linux.
   license: MIT
   min_ansible_version: 2.0
   platforms:
@@ -12,6 +13,9 @@ galaxy_info:
     versions:
     - trusty
     - xenial
+    - bionic
   galaxy_tags:
     - ad
     - activedirectory
+    - windows
+    - linux

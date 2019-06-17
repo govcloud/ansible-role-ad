@@ -1,13 +1,15 @@
 ---
-- set_fact:
-    distro: "{{ansible_os_family}}-{{ansible_distribution_major_version}}"
+- name: setting distro fact
+  set_fact:
+    distro: "{{ ansible_os_family }}-{{ linux_ad_ansible_distribution_major_version }}"
   tags:
     - aad_adjoin
     - aad_sssd
     - always
 
 # load version-specific variables
-- block:
+- name: include vars
+  block:
     - include_vars: "{{ item }}"
       with_first_found:
         - "../vars/{{distro}}.yml"
@@ -99,3 +101,13 @@
     state: present
     regexp: '^%domain\s'
     line: '%domain\ admins@cloud.statcan.ca'
+
+- name: create Active Directory home directory
+  file:
+    path: '{{ item }}'
+    owner: '{{ linux_ad_home_dir_user }}'
+    group: '{{ linux_ad_home_dir_group }}'
+    mode: '{{ linux_ad_home_dir_mode }}'
+    recurse: yes
+    state: directory
+  with_items: '{{ linux_ad_home_dir_base | default([]) }}'
