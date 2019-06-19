@@ -32,3 +32,12 @@ linux_ad_home_dir_base:
 linux_ad_home_dir_user: 'root'
 linux_ad_home_dir_group: 'root'
 linux_ad_home_dir_mode: 0755
+
+linux_ad_sudoers_d:
+  - file: linux_ad
+    host: ALL
+    runas: ALL
+    ugid: '%Enterprise\ Admins'
+    nopasswd: true
+    commands:
+      - 'ALL'

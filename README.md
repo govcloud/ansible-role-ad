@@ -110,6 +110,17 @@ The group of the newly created subhome directory.
 
 The mode of the newly created subhome directory.
 
+    linux_ad_sudoers_d:
+    - file: linux_ad
+        host: ALL
+        runas: ALL
+        ugid: '%Enterprise\ Admins'
+        nopasswd: true
+        commands:
+        - 'ALL'
+
+Create sudoers file with these parameters. The file is filename of the created file in sudoers.d.
+
 ## Dependencies
 
 None.
