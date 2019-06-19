@@ -1,5 +1,5 @@
 ---
-# Ubuntu packages
+# Debian packages
 authconfig_packages:
   - 'realmd'
   - 'adcli'

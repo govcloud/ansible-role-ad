@@ -1,14 +1,14 @@
 ---
 # Ubuntu packages
 authconfig_packages:
-  - realmd
-  - adcli
-  - packagekit
-  - ldap-utils
-  - krb5-user
-  - libpam-krb5
-  - sssd
-  - sssd-tools
-  - libpam-sss
-  - libnss-sss
-  - openssh-server
+  - 'realmd'
+  - 'adcli'
+  - 'packagekit'
+  - 'ldap-utils'
+  - 'krb5-user'
+  - 'libpam-krb5'
+  - 'sssd'
+  - 'sssd-tools'
+  - 'libpam-sss'
+  - 'libnss-sss'
+  - 'openssh-server'
