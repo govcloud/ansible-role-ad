@@ -29,6 +29,8 @@
 
 - import_tasks: common.yml
 
+- import_tasks: sudoers.yml
+
 - meta: flush_handlers
 
 # - name: Update sudoers to give AD group access
