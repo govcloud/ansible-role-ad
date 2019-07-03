@@ -3,7 +3,6 @@
 authconfig_packages:
   - 'sssd'
   - 'adcli'
-  - 'realmd'
   - 'krb5-workstation'
   - 'oddjob'
   - 'oddjob-mkhomedir'
