@@ -2,6 +2,16 @@
 - name: setting distro fact
   set_fact:
     distro: "{{ ansible_os_family }}-{{ linux_ad_ansible_distribution_major_version }}"
+  when: ansible_os_family != 'Debian'
+  tags:
+    - aad_adjoin
+    - aad_sssd
+    - always
+
+- name: setting distro fact
+  set_fact:
+    distro: "{{ ansible_os_distribution }}-{{ linux_ad_ansible_distribution_major_version }}"
+  when: ansible_os_family == 'Debian'
   tags:
     - aad_adjoin
     - aad_sssd
