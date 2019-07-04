@@ -10,7 +10,7 @@
   file:
     path: /etc/krb5.conf.d/
     state: directory
-  when: {{ ansible_os_family }} == "RedHat" and {{ linux_ad_ansible_distribution_major_version }} == 6
+  when: ansible_os_family == 'RedHat' and linux_ad_ansible_distribution_major_version == 6
 
 - name: join Domain
   shell: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ linux_ad_authconfig_domain }}' --domain-ou='{{ linux_ad_authconfig_computer_ou }}' --login-user={{ linux_ad_authconfig_sssd_user }} -S  {{ linux_ad_ad_info_ad_server }} {{ linux_ad_authconfig_domain }}"
