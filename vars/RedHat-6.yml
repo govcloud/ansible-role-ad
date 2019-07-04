@@ -1,0 +1,11 @@
+---
+# CentOS / RHEL
+authconfig_packages:
+  - 'sssd'
+  - 'adcli'
+  - 'krb5-workstation'
+  - 'oddjob'
+  - 'oddjob-mkhomedir'
+  - 'authconfig'
+  - 'samba-common'
+  - 'nscd'
