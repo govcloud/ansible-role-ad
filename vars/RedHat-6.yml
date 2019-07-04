@@ -8,5 +8,4 @@ authconfig_packages:
   - 'oddjob-mkhomedir'
   - 'authconfig'
   - 'samba-common'
-  - 'samba-common-tools'
   - 'nscd'
