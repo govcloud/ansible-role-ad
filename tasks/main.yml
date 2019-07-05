@@ -43,13 +43,6 @@
 
 - meta: flush_handlers
 
-# - name: Update sudoers to give AD group access
-#   lineinfile:
-#     path: /etc/sudoers
-#     state: present
-#     regexp: '^%domain\s'
-#     line: '%domain\ admins@cloud.statcan.ca'
-
 - name: create Active Directory home directory
   file:
     path: '{{ item }}'
