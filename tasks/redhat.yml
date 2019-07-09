@@ -41,8 +41,8 @@
     - "disable nslcd"  # Odd behavior if is running
     - "restart sssd"
     - "restart dbus"
-    - "restart oddjob"
     - "restart logind"
+    - "restart oddjob"
   tags:
     - aad_authconfig
     - aad_sssd
