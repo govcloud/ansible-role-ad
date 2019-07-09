@@ -4,10 +4,47 @@
     name: "{{ authconfig_packages }}"
     update_cache: true
 
-#- name: nsswitch conf
-#  template:
-#    src: nsswitch.conf.j2
-#    dest: /etc/nsswitch.conf
+- name: nsswitch passwd
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'passwd:         compat systemd sss'
+    regexp: '^passwd: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: nsswitch shadow
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'shadow:         compat sss'
+    regexp: '^shadow: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: nsswitch group
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'group:          compat systemd sss'
+    regexp: '^group: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: nsswitch netgroup
+  lineinfile:
+    dest: /etc/nsswitch.conf
+    line: 'netgroup:       nis sss'
+    regexp: '^netgroup: .*'
+  tags:
+    - aad_nsswitch
+    - aad_sssd
+
+- name: /etc/hosts entry
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }}  {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
+
 
 # PAM module to auto-create home directories
 - name: mkhomedir
