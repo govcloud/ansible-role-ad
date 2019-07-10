@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: linux-ad
   author: Kálmán Szalai - KAMI
-  description: Installs and configures Active Directory on Linux.
+  description: Installs and configures Active Directory on Linux using sssd. Perfectly works with Ubuntu and Red Hat/CentOS also manages sudoers.
   license: MIT
   min_ansible_version: 2.0
   platforms:
@@ -21,3 +21,5 @@ galaxy_info:
     - linux
     - system
     - sssd
+    - sudo
+    - sudoers
