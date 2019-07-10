@@ -6,7 +6,7 @@ linux_ad_authconfig_domain: 'cloud.department.ca'
 linux_ad_authconfig_realm:  'CLOUD.DEPARTMENT.CA'
 linux_ad_authconfig_computer_ou: 'ou=computers,dc=cloud,dc=department,dc=ca'
 
-#linux_ad_authconfig_windomain: 'EXAMPLECOM'
+linux_ad_authconfig_windomain: 'EXAMPLECOM'
 
 linux_ad_authconfig_sssd_user: 'admin'
 linux_ad_authconfig_sssd_pass: 'pass'

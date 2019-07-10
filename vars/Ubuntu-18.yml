@@ -13,3 +13,5 @@ authconfig_packages:
   - 'libnss-sss'
   - 'openssh-server'
   - 'chrony'
+  - 'samba'
+  - 'samba-common-bin'

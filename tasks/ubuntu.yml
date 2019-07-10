@@ -4,6 +4,39 @@
     name: "{{ authconfig_packages }}"
     update_cache: true
 
+- name: smb.conf
+  template:
+    src: cmb.conf.j2
+    dest: /etc/samba/krb5.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  tags:
+    - aad_smb_conf
+    - aad_samba
+
+- name: login to Domain
+  shell: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | kinit {{ linux_ad_authconfig_sssd_user }}"
+  args:
+    creates: /etc/krb5.keytab
+  tags:
+    - aad_adlogin
+    - aad_agent
+    - aad_samba
+
+- name: join Domain
+  shell: "net ads join -k"
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "restart nmbd"
+    - "restart sssd"
+  tags:
+    - aad_adjoin
+    - aad_agent
+    - aad_samba
+
 - name: nsswitch passwd
   lineinfile:
     dest: /etc/nsswitch.conf
@@ -44,24 +77,3 @@
   lineinfile:
     dest: /etc/hosts
     line: "{{ ansible_default_ipv4.address }}  {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
-
-
-# PAM module to auto-create home directories
-- name: mkhomedir
-  template:
-    dest: '/usr/share/pam-configs/mkhomedir'
-    src: 'mkhomedir.j2'
-    owner: 'root'
-    group: 'root'
-    mode: 0644
-  notify: pam-auth-update
-
-# PAM module to restrict access to specific users/groups
-#- name: enable access restrictions
-#  template:
-#    dest: /usr/share/pam-configs/access
-#    src: pam_config_access.j2
-#    owner: 'root'
-#    group: 'root'
-#    mode: 0644
-#  notify: pam-auth-update
