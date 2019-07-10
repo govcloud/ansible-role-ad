@@ -12,7 +12,6 @@ galaxy_info:
       - 6
   - name: Ubuntu
     versions:
-    - trusty
     - xenial
     - bionic
   galaxy_tags:
@@ -20,3 +19,5 @@ galaxy_info:
     - activedirectory
     - windows
     - linux
+    - system
+    - sssd
