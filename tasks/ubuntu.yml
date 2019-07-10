@@ -7,7 +7,7 @@
 - name: smb.conf
   template:
     src: smb.conf.j2
-    dest: /etc/samba/krb5.conf
+    dest: /etc/samba/smb.conf
     owner: root
     group: root
     mode: 0644
