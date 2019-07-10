@@ -41,7 +41,8 @@
   lineinfile:
     dest: /etc/pam.d/common-session
     line: 'session required        pam_mkhomedir.so skel=/etc/skel/ umask=0027'
-    regexp: '.*pam_unix\.so.*'
+    regexp: '.*pam_mkhomedir\.so.*'
+    insertafter: '.*pam_unix\.so.*'
   tags:
     - aad_pam
     - aad_home
