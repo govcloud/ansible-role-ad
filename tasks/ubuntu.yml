@@ -26,7 +26,7 @@
     - aad_samba
 
 - name: join Domain
-  shell: "net ads join -k"
+  shell: "net ads join -D {{ linux_ad_authconfig_realm }} -k"
   notify:
     - "restart chrony"
     - "restart smbd"
