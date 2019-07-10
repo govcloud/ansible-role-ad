@@ -16,15 +16,6 @@
     - aad_smb_conf
     - aad_samba
 
-- name: login to Domain
-  shell: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | kinit {{ linux_ad_authconfig_sssd_user }}"
-  args:
-    creates: /etc/krb5.keytab
-  tags:
-    - aad_adlogin
-    - aad_agent
-    - aad_samba
-
 - name: join Domain
   shell: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | net ads join -D {{ linux_ad_authconfig_realm }} -U {{ linux_ad_authconfig_sssd_user }}"
   notify:
