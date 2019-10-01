@@ -9,3 +9,5 @@ authconfig_packages:
   - 'authconfig'
   - 'samba-common'
   - 'nscd'
+
+dbus_service: 'messagebus'

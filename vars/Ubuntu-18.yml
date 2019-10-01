@@ -15,3 +15,5 @@ authconfig_packages:
   - 'chrony'
   - 'samba'
   - 'samba-common-bin'
+
+dbus_service: 'dbus'

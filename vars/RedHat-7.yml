@@ -11,3 +11,5 @@ authconfig_packages:
   - 'samba-common'
   - 'samba-common-tools'
   - 'nscd'
+
+dbus_service: 'dbus'
