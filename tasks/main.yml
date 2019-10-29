@@ -29,6 +29,12 @@
     - aad_adjoin
     - aad_sssd
 
+- name: delete /etc/krb5.keytab file for rejoin
+  file:
+    path: /etc/krb5.keytab
+    state: absent
+  when: linux_ad_rejoin
+
 - import_tasks: redhat.yml
   when: ansible_os_family == 'RedHat'
 

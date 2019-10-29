@@ -79,9 +79,13 @@ Specify the main version of your Linux OS if something gets wrong and the versio
 
 Specify the primary and a backup Active Directory login server.
 
+    linux_ad_rejoin: false
+
+Try to rejoint to the Active Directory bia deleting /etc/krb5.keytab file. Default is false.
+
     linux_ad_home_dir: '/home/%d/%u'
 
-Home directory of the user. 
+Home directory of the user.
 Additionally you can use these variables:
 %u -login name
 %U - UID number

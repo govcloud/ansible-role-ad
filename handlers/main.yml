@@ -30,7 +30,6 @@
     enabled: yes
     state: restarted
 
-
 - name: restart oddjob
   service:
     name: oddjobd
