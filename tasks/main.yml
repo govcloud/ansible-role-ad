@@ -41,8 +41,6 @@
 
 - import_tasks: sudoers.yml
 
-- meta: flush_handlers
-
 - name: create Active Directory home directory
   file:
     path: '{{ item }}'
@@ -52,3 +50,7 @@
     recurse: yes
     state: directory
   with_items: '{{ linux_ad_home_dir_base | default([]) }}'
+  notify:
+    - "restart oddjob"
+
+- meta: flush_handlers
