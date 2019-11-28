@@ -150,6 +150,28 @@ This role was created in 2019 by Kálmán Szalai - KAMI based on work of William
 If you have any question, do not hesitate and drop me a line.
 If you found a bug, or have a feature request, you can [fill an issue](https://github.com/KAMI911/ansible-role-linux-ad/issues).
 
+### Using as a submudule of an AWX playbook
+
+#### Add as a submodule
+
+```
+git submodule add --force git@github.com:KAMI911/ansible-role-linux-ad.git roles/linux-ad
+```
+
+#### Update as sumodule
+
+Update only this submodule
+
+```
+git submodule update --remote roles/linux-ad/
+```
+
+Update all submodules:
+
+```
+git submodule foreach git pull origin master
+```
+
 ## Contributing
 
 There are many ways to contribute to ansible-role-linux-ad -- whether it be sending patches,
