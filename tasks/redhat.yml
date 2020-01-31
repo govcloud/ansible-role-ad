@@ -51,7 +51,7 @@
 
 # Parameter --nostart used since krb5.conf and sssd.conf don't exist yet.
 - name: authselect
-  shell: "/usr/sbin/authselect select sssd with-mkhomedir && touch /var/lib/authconfig/ansible_configured"
+  shell: "/usr/bin/authselect select sssd with-mkhomedir && touch /var/lib/authconfig/ansible_configured"
   args:
     creates: /var/lib/authconfig/ansible_configured
   notify:
