@@ -143,7 +143,7 @@ the MIT / BSD, you will find a copy of this license in the
 
 ## Author Information
 
-This role was created in 2019 by Kálmán Szalai - KAMI based on work of William Hearn (https://github.com/govcloud/ansible-role-ad)
+This role was created in 2019-2020 by Kálmán Szalai - KAMI based on work of William Hearn (https://github.com/govcloud/ansible-role-ad)
 
 ## Support
 
