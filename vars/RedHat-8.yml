@@ -11,5 +11,6 @@ authconfig_packages:
   - 'samba-common'
   - 'samba-common-tools'
   - 'nscd'
+  - 'python3'
 
 dbus_service: 'dbus'
