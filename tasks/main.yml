@@ -38,6 +38,8 @@
     - aad_adjoin
     - aad_adrejoin
 
+- import_tasks: common.yml
+
 - import_tasks: redhat.yml
   when: ansible_os_family == 'RedHat'
 
@@ -45,8 +47,6 @@
   when: ansible_distribution == 'Ubuntu'
 
 - import_tasks: sshd.yml
-
-- import_tasks: common.yml
 
 - import_tasks: sudoers.yml
 
