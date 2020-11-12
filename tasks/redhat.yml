@@ -30,7 +30,7 @@
 
 - name: join Domain
   shell:
-    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | realm join --computer-ou='{{ linux_ad_authconfig_computer_ou }}' --user='{{ linux_ad_authconfig_sssd_user }}' '{{ linux_ad_authconfig_domain }}'"
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | realm join -v --computer-ou='{{ linux_ad_authconfig_computer_ou }}' --user='{{ linux_ad_authconfig_sssd_user }}' '{{ linux_ad_authconfig_domain }}'"
     creates: /etc/krb5.keytab
   tags:
     - aad_adjoin
