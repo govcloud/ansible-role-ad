@@ -49,6 +49,7 @@ ldap_id_mapping = True
 use_fully_qualified_names = False
 fallback_homedir = {{ linux_ad_home_dir }}
 access_provider = ad
+ad_gpo_ignore_unreadable = True
 
 {% if linux_ad_authconfig_debug_mode %}
 debug_level = {{ linux_ad_authconfig_debug_level }}
