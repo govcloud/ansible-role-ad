@@ -1,0 +1,28 @@
+---
+- name: leave realms for rejoin
+  shell:
+    cmd: "realm leave"
+  register: result
+  when: linux_ad_rejoin
+  ignore_errors: yes
+  tags:
+    - aad_adjoin
+    - aad_adrejoin
+
+- name: leave realms for rejoin
+  shell:
+    cmd: "realm leave"
+  register: result
+  when: linux_ad_rejoin
+  ignore_errors: yes
+  tags:
+    - aad_adjoin
+    - aad_adrejoin
+
+- name: delete /etc/krb5.keytab file for rejoin
+  file:
+    path: /etc/krb5.keytab
+    state: absent
+  tags:
+    - aad_adjoin
+    - aad_adrejoin
