@@ -24,3 +24,12 @@
   tags:
     - aad_sssd_conf
     - aad_sssd
+
+- name: check sssd.conf configuration
+  shell:
+    cmd: "sssctl config-check"
+  register: result
+  failed_when: false
+
+- debug:
+    var: result.stdout
