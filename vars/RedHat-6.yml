@@ -2,6 +2,7 @@
 # CentOS / RHEL
 authconfig_packages:
   - 'sssd'
+  - 'sssd-tools'
   - 'adcli'
   - 'krb5-workstation'
   - 'oddjob'
