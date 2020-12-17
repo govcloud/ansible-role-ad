@@ -97,6 +97,10 @@ Additionally you can use these variables:
 
 Shell to use for freshly created users.
 
+    linux_ad_use_fq_username: true
+
+Use fully qualified name for login name. When false you can login with username, when tru you can login with username@domain_name
+
     linux_ad_home_dir_base:
       - '/home/{{ linux_ad_authconfig_domain }}'
 
