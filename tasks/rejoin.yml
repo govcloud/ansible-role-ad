@@ -23,6 +23,7 @@
   file:
     path: /etc/krb5.keytab
     state: absent
+  when: linux_ad_rejoin
   tags:
     - aad_adjoin
     - aad_adrejoin
