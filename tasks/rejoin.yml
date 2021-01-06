@@ -19,11 +19,14 @@
     - aad_adjoin
     - aad_adrejoin
 
-- name: delete /etc/krb5.keytab file for rejoin
+- name: delete AD file for rejoin
   file:
-    path: /etc/krb5.keytab
+    path: '{{ item }}'
     state: absent
-  when: linux_ad_rejoin
+  with_items:
+   - /var/lib/authconfig/ansible_configured
+   - /var/lib/authselect/ansible_configured
+   - /etc/krb5.keytab
   tags:
     - aad_adjoin
     - aad_adrejoin
