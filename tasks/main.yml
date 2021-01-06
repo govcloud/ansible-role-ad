@@ -56,4 +56,8 @@
   notify:
     - "restart oddjob"
 
+- name: manage firewalld
+  include_tasks: manage_firewalld.yml
+  when: linux_ad_manage_firewalld
+
 - meta: flush_handlers

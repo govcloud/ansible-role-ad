@@ -29,6 +29,15 @@ None.
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
+
+### Port, connection, and firewall related options
+
+    linux_ad_manage_firewalld: true
+
+Role manages the firewalld settings of required ports.
+
+### Debug settings
+
     linux_ad_authconfig_debug_mode: false
 
 Use authconfig debug mode.
@@ -38,6 +47,8 @@ Use authconfig debug mode.
 Set authconfig debug level.
 
     linux_ad_authconfig_domain: 'cloud.department.ca'
+
+### Genereal AD settings
 
 Set authconfig (FQDN) domain name.
 
