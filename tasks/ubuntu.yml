@@ -77,4 +77,4 @@
 - name: /etc/hosts entry
   lineinfile:
     dest: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }}  {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
