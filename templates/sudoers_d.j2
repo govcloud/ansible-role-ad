@@ -1,0 +1,8 @@
+## {{ ansible_managed }}
+
+{% for command in item.commands %}
+{%   set host = item.host if item.host is defined else 'ALL' %}
+{%   set runas = item.runas if item.runas is defined else 'ALL' %}
+{%   set nopasswd = "NOPASSWD: " if item.nopasswd | default(false) else "" %}
+{{ item.ugid }}	{{ host }} = ({{ runas }})	{{ nopasswd }}{{ command }}
+{% endfor %}

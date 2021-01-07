@@ -1,24 +1,32 @@
 ---
-services: docker
+dist: bionic
+language: python
+python: "3.6"
 
-env:
-  # Defaults.
-  - distro: centos7
-    test_idempotence: false
+# Use the new container infrastructure
+sudo: true
+
+# Install ansible
+addons:
+  apt:
+    packages:
+    - python3-pip
+
+install:
+  # Install ansible
+  - pip3 install ansible
+
+  # Check ansible version
+  - ansible --version
+
+  # Create ansible.cfg with correct roles_path
+  - printf '[defaults]\nroles_path=../' >ansible.cfg
 
 script:
-  # Configure test script so we can run extra tests after playbook is run.
-  - export container_id=$(date +%s)
-  - export cleanup=false
-
-  # Download test shim.
-  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/sylus/e5d6eb8852d649ae78477b2daf86e707/raw
-  - chmod +x ${PWD}/tests/test.sh
-
-  # Run tests.
-  - ${PWD}/tests/test.sh
+  # Basic role syntax check
+  - "ansible-playbook tests/test.yml -i tests/inventory --syntax-check"
+  # - "ansible-playbook -i tests/inventory tests/test.yml --connection=local --become-user root"
+  # - "ansible-playbook -i tests/inventory tests/test.yml --connection=local --become-user root | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
 
 notifications:
-  slack:
-    secure: M+yCxKJqimIn8NeW0B9zZfjgLur6YnxqA5XoulSuuIwNHqkAR7d6EAsydwR8vEKTqVfKdOobMVmalOCcQOw6HSwnu49KYUAESYsL/yyvK/aHXM52y6XV1L6s+gtD6/eQo3VECR8xMAM2+GkzUGeaA2hWA13CwXo7aXcik0/q2KTJb1eTXDj1LYyjwPE6pmHcWsxE6bmGLTvaHDpWQpoSTD3tiJqvAIVNsSGm4HiZ0rlVS09hM+xU3OTVIfurYmWJI+Do1KceINrwDlbEZgsYGXLCg5Oah/DK5pAmKocF8BDNZx01AH3vqG2yQSoV4xpTF+NdfHh2XFY9If1Ugyv9xDAkLbCkMzhzh8UIvXNCWvWstKh6I8gnJPJGUst0FXk2clCx+ILl4wlMrdd0UcUA5GX6R6ELUfxfT//xVK5I5t0IbCqBB5Nl1bDf7ndeksYqlTxk4DoM6t5yGlhCRqNz5z1SxMe2wv4OQaIuuNsFVvQ9USPc7FKHKxQQBAOiT8b0QNuFm8U/nresytpZrMQ0vMnMA9iQz+xQvdKyVw1ZS2HPx05lWBv0CC3sDkPqXETohG7bC5hkSY4LPNNlqtu6oOtfmbCuDfbpjpzAm5NvtNcdMavAd/jtEfO7sSxAwW02wty4XilXk4INMOp+2z5W2vwkyMkpTsvsnm7Da6mPzMA=
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

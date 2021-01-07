@@ -1,0 +1,19 @@
+---
+# Ubuntu packages
+authconfig_packages:
+  - 'realmd'
+  - 'adcli'
+  - 'packagekit'
+  - 'ldap-utils'
+  - 'krb5-user'
+  - 'libpam-krb5'
+  - 'sssd'
+  - 'sssd-tools'
+  - 'libpam-sss'
+  - 'libnss-sss'
+  - 'openssh-server'
+  - 'chrony'
+  - 'samba'
+  - 'samba-common-bin'
+
+dbus_service: 'dbus'

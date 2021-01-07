@@ -1,0 +1,19 @@
+---
+- name: creating sudoers.d configuration file
+  become: true
+  template:
+    src: sudoers_d.j2
+    dest: "{{ '/etc/sudoers.d/' + item.file }}"
+    owner: root
+    group: root
+    mode: 0440
+    validate: '/usr/sbin/visudo -cf %s'
+  loop: "{{ linux_ad_sudoers_d }}"
+  loop_control:
+    label: "{{ item.file }}"
+  when:
+    - item.commands is defined
+    - item.file is defined
+    - item.ugid is defined
+  tags:
+    - sudo
