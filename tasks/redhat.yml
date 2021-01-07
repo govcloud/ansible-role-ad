@@ -1,10 +1,17 @@
 ---
 - name: authconfig packages
-  yum: name='{{ authconfig_packages }}'
+  yum:
+    name: '{{ authconfig_packages }}'
+    update_cache: true
   tags:
     - aad_agent
     - aad_packages
     - aad_sssd
+
+- name: /etc/hosts entry
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
 
 - name: smb.conf
   template:
@@ -32,22 +39,54 @@
 - debug:
     var: result.stdout
 
-- name: list realms
+- name: join Domain (net ads)
   shell:
-    cmd: "realm list"
-  register: result
-
-- debug:
-    var: result.stdout
-
-- name: join Domain
-  shell:
-    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | realm join -v --computer-ou='{{ linux_ad_authconfig_computer_ou }}' --user='{{ linux_ad_authconfig_sssd_user }}' '{{ linux_ad_authconfig_domain }}'"
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | net ads join -D {{ linux_ad_authconfig_domain }} -U {{ linux_ad_authconfig_sssd_user }}"
     creates: /etc/krb5.keytab
+  become: yes
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "restart nmbd"
+    - "restart sssd"
   tags:
     - aad_adjoin
     - aad_agent
     - aad_sssd
+  when linux_ad_join_method == 'netads'
+
+- name: join Domain (realm)
+  shell:
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | realm join --computer-ou='{{ linux_ad_authconfig_computer_ou }}' --user='{{ linux_ad_authconfig_sssd_user }}' '{{ linux_ad_authconfig_domain }}'"
+    creates: /etc/krb5.keytab
+  become: yes
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "restart nmbd"
+    - "restart sssd"
+  tags:
+    - aad_adjoin
+    - aad_agent
+    - aad_sssd
+  when linux_ad_join_method == 'realm'
+
+- name: join Domain (adcli)
+  shell:
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ linux_ad_authconfig_domain }}' --domain-ou='{{ linux_ad_authconfig_computer_ou }}' --login-user={{ linux_ad_authconfig_sssd_user }} -S  {{ linux_ad_ad_info_ad_server }} {{ linux_ad_authconfig_domain }}"
+    creates: /etc/krb5.keytab
+  become: yes
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "disable nmbd"
+    - "restart winbind"
+    - "restart sssd"
+  tags:
+    - aad_adjoin
+    - aad_agent
+    - aad_sssd
+  when linux_ad_join_method == 'adcli'
 
 - name: list realms
   shell:
@@ -131,8 +170,3 @@
   tags:
     - aad_nsswitch
     - aad_sssd
-
-- name: /etc/hosts entry
-  lineinfile:
-    dest: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
