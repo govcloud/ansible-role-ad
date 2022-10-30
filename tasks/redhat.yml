@@ -1,22 +1,102 @@
 ---
 - name: authconfig packages
-  yum: name={{ item }}
-  with_items: "{{ authconfig_packages }}"
+  yum:
+    name: '{{ authconfig_packages }}'
+    update_cache: true
   tags:
     - aad_agent
     - aad_packages
     - aad_sssd
 
-- name: Join Domain
-  shell: "echo -n '{{ authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ authconfig_domain }}' --domain-ou='{{ authconfig_computer_ou }}' --login-user={{ authconfig_sssd_user }} -S  {{ad_info_ad_server}} {{ authconfig_domain }}"
-  args:
+- name: /etc/hosts entry
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_hostname }}.{{ linux_ad_authconfig_domain }} {{ ansible_hostname }}"
+
+- name: smb.conf
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  tags:
+    - aad_smb_conf
+    - aad_samba
+
+- name: create /etc/krb5.conf.d folder
+  file:
+    path: /etc/krb5.conf.d/
+    state: directory
+  when: ansible_os_family == 'RedHat' and linux_ad_ansible_distribution_major_version|int == '6'
+
+- name: discover Domain
+  shell:
+    cmd: "realm discover -v {{ linux_ad_authconfig_domain }}"
+  register: result
+
+- debug:
+    var: result.stdout
+
+- name: join Domain (net ads)
+  shell:
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | net ads join -D {{ linux_ad_authconfig_domain }} -U {{ linux_ad_authconfig_sssd_user }}"
     creates: /etc/krb5.keytab
+  become: yes
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "restart nmbd"
+    - "restart sssd"
   tags:
     - aad_adjoin
     - aad_agent
     - aad_sssd
+  when: linux_ad_join_method == 'netads'
 
-# Save backup.
+- name: join Domain (realm)
+  shell:
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | realm join --computer-ou='{{ linux_ad_authconfig_computer_ou }}' --user='{{ linux_ad_authconfig_sssd_user }}' '{{ linux_ad_authconfig_domain }}'"
+    creates: /etc/krb5.keytab
+  become: yes
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "restart nmbd"
+    - "restart sssd"
+  tags:
+    - aad_adjoin
+    - aad_agent
+    - aad_sssd
+  when: linux_ad_join_method == 'realm'
+
+- name: join Domain (adcli)
+  shell:
+    cmd: "echo -n '{{ linux_ad_authconfig_sssd_pass }}' | adcli join --stdin-password --host-fqdn='{{ ansible_hostname }}.{{ linux_ad_authconfig_domain }}' --domain-ou='{{ linux_ad_authconfig_computer_ou }}' --login-user={{ linux_ad_authconfig_sssd_user }} -S  {{ linux_ad_ad_info_ad_server }} {{ linux_ad_authconfig_domain }}"
+    creates: /etc/krb5.keytab
+  become: yes
+  notify:
+    - "restart chrony"
+    - "restart smbd"
+    - "disable nmbd"
+    - "restart winbind"
+    - "restart sssd"
+  tags:
+    - aad_adjoin
+    - aad_agent
+    - aad_sssd
+  when: linux_ad_join_method == 'adcli'
+
+- name: list realms
+  shell:
+    cmd: "realm list"
+  register: result
+
+- debug:
+    var: result.stdout
+
+# Save backup
 - name: authconfig
   shell: "/usr/sbin/authconfig --savebackup=pre-authconfig-adcli"
   args:
@@ -24,6 +104,7 @@
   tags:
     - aad_authconfig
     - aad_sssd
+  when: linux_ad_ansible_distribution_major_version|int <= 7 and ansible_os_family == 'RedHat'
 
 # Parameter --nostart used since krb5.conf and sssd.conf don't exist yet.
 - name: authconfig
@@ -36,11 +117,31 @@
     - "disable nslcd"  # Odd behavior if is running
     - "restart sssd"
     - "restart dbus"
-    - "restart oddjob"
     - "restart logind"
+    - "restart oddjob"
   tags:
     - aad_authconfig
     - aad_sssd
+  when: linux_ad_ansible_distribution_major_version|int <= 7 and ansible_os_family == 'RedHat'
+
+# Parameter --nostart used since krb5.conf and sssd.conf don't exist yet.
+- name: authselect
+  shell: "/usr/bin/authselect select sssd with-mkhomedir && touch /var/lib/authselect/ansible_configured"
+  args:
+    creates: /var/lib/authselect/ansible_configured
+  notify:
+    - "clear nscd"
+    - "clear ssh AllowGroups"
+    - "disable nslcd"  # Odd behavior if is running
+    - "restart sssd"
+    - "restart dbus"
+    - "restart logind"
+    - "restart oddjob"
+  tags:
+    - aad_authselect
+    - aad_authconfig
+    - aad_sssd
+  when: linux_ad_ansible_distribution_major_version|int >= 8 and ansible_os_family == 'RedHat'
 
 # On RHEL nsswitch.conf is not updated.
 - name: nsswitch passwd
@@ -69,8 +170,3 @@
   tags:
     - aad_nsswitch
     - aad_sssd
-
-- name: /etc/hosts entry
-  lineinfile:
-    dest: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }}  {{ ansible_hostname }}.{{ authconfig_domain }} {{ ansible_hostname }}"

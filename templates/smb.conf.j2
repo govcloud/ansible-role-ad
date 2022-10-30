@@ -1,0 +1,8 @@
+[global]
+
+workgroup = {{ linux_ad_authconfig_windomain }}
+client signing = yes
+client use spnego = yes
+kerberos method = secrets and keytab
+realm = {{ linux_ad_authconfig_realm }}
+security = ads

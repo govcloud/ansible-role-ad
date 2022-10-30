@@ -1,13 +1,26 @@
 ---
 galaxy_info:
-  author: William Hearn
-  description: Install and configures Active Directory.
+  role_name: linux-ad
+  author: Kálmán Szalai - KAMI
+  description: Installs and configures Active Directory on Linux using sssd. Perfectly works with Ubuntu and Red Hat/CentOS also manages sudoers.
   license: MIT
   min_ansible_version: 2.0
   platforms:
   - name: EL
     versions:
       - 7
+      - 6
+      - 8
+  - name: Ubuntu
+    versions:
+    - xenial
+    - bionic
   galaxy_tags:
     - ad
     - activedirectory
+    - windows
+    - linux
+    - system
+    - sssd
+    - sudo
+    - sudoers

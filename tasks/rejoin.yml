@@ -1,0 +1,32 @@
+---
+- name: leave realms for rejoin
+  shell:
+    cmd: "realm leave"
+  register: result
+  when: linux_ad_rejoin
+  ignore_errors: yes
+  tags:
+    - aad_adjoin
+    - aad_adrejoin
+
+- name: leave realms for rejoin
+  shell:
+    cmd: "realm leave"
+  register: result
+  when: linux_ad_rejoin
+  ignore_errors: yes
+  tags:
+    - aad_adjoin
+    - aad_adrejoin
+
+- name: delete AD file for rejoin
+  file:
+    path: '{{ item }}'
+    state: absent
+  with_items:
+   - /var/lib/authconfig/ansible_configured
+   - /var/lib/authselect/ansible_configured
+   - /etc/krb5.keytab
+  tags:
+    - aad_adjoin
+    - aad_adrejoin

@@ -30,19 +30,19 @@
     enabled: yes
     state: restarted
 
-# Service is dbus
-- name: restart dbus
-  service:
-    name: dbus
-    enabled: yes
-    state: restarted
-  when: ansible_os_family == 'RedHat'
-
 - name: restart oddjob
   service:
     name: oddjobd
     enabled: yes
     state: restarted
+
+# Service is dbus
+- name: restart dbus
+  service:
+    name: '{{ dbus_service }}'
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'RedHat' or ansible_distribution == 'Ubuntu'
 
 - name: restart sshd
   service:
@@ -57,6 +57,34 @@
     enabled: yes
     state: restarted
   when: ansible_os_family == 'RedHat'
+
+- name: restart ssh
+  service:
+    name: ssh
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'Debian'
+
+- name: restart smbd
+  service:
+    name: smbd
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'Debian'
+
+- name: restart nmbd
+  service:
+    name: nmbd
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'Debian'
+
+- name: restart chrony
+  service:
+    name: chrony
+    enabled: yes
+    state: restarted
+  when: ansible_os_family == 'Debian'
 
 - name: pam-auth-update
   command: /usr/sbin/pam-auth-update --package

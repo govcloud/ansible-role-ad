@@ -1,0 +1,42 @@
+---
+- name: Install ssh legal thing
+  copy:
+    src: ssh_issue
+    dest: /etc/ssh/issue
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart sshd
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- name: Update sshd_config for legal thing
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'Banner /etc/ssh/issue'
+    regexp: '^(#|)Banner\ .*'
+  notify: restart sshd
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- name: Update sshd_config to allow PasswordAuthentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'PasswordAuthentication yes'
+    regexp: '^(#|)PasswordAuthentication\ .*'
+  notify: restart sshd
+  tags:
+    - aad_ssh
+    - aad_sssd
+
+- name: Update sshd_config to remove old PasswordAuthentication no if exists
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'PasswordAuthentication no'
+    state: absent
+  notify: restart sshd
+  tags:
+    - aad_ssh
+    - aad_sssd
