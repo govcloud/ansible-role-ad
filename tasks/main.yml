@@ -28,6 +28,7 @@
   tags:
     - aad_adjoin
     - aad_sssd
+    - always
 
 - import_tasks: rejoin.yml
   when: linux_ad_rejoin
